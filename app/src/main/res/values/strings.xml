@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">COVID-19 Proof of vaccination </string>
+    <string name="exit">bye</string>
+    <string name="pdf">pdf file</string>
+</resources>
