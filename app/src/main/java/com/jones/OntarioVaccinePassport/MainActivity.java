@@ -26,6 +26,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -90,7 +91,9 @@ public class MainActivity extends AppCompatActivity  {
             im.setImageBitmap(BitmapFactory.decodeStream(in));
             return true;
         } catch (Exception e) {
-            Log.e("loadQR", "loadQR: ",e );
+            Toast toast = Toast.makeText(getApplicationContext(),
+                    R.string.imageNotFound, Toast.LENGTH_LONG);
+            toast.show();
             return false;
         }
     }
@@ -103,13 +106,13 @@ public class MainActivity extends AppCompatActivity  {
         input.setInputType(InputType.TYPE_CLASS_TEXT);
         builder.setView(input);
         input.setText(pfd_uri);
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(R.string.OK, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 pfd_uri = input.getText().toString();
                 saveProps();
             }
-        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        }).setNegativeButton(R.string.Cancel, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
