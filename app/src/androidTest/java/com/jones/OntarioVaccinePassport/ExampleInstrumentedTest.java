@@ -1,4 +1,4 @@
-package com.jones.myapplication;
+package com.jones.OntarioVaccinePassport;
 
 import android.content.Context;
 
