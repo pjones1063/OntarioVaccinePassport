@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ContentUris;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -17,11 +18,13 @@ import android.os.Environment;
 import android.os.FileUtils;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -54,8 +57,7 @@ public class MainActivity extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         loadProps();
-        if (!loadQR())
-            saveProps();
+        if (!loadQR()) doFilePrompt();
     }
 
     /**
@@ -95,7 +97,25 @@ public class MainActivity extends AppCompatActivity  {
 
 
     private void doFilePrompt () {
-
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("QR Image File Location");
+        final EditText input = new EditText(this);
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        builder.setView(input);
+        input.setText(pfd_uri);
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                pfd_uri = input.getText().toString();
+                saveProps();
+            }
+        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        builder.show();
     }
 
     public void loadProps()  {
@@ -106,7 +126,6 @@ public class MainActivity extends AppCompatActivity  {
 
     public void saveProps()  {
         try {
-            pfd_uri = "/storage/emulated/0/Download/qr.png";
             SharedPreferences settings = getSharedPreferences("com.jones.OntarioVaccinePassport", Activity.MODE_PRIVATE);
             SharedPreferences.Editor editor = settings.edit();
             editor.putString("com.jones.OntarioVaccinePassport.pdf", pfd_uri);
